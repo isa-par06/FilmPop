@@ -41,14 +41,14 @@ const styles=StyleSheet.create({
   },
   filmTop: {
     position: 'absolute',
-    top: -65,
+    top: -30,
     left: 0,
     width: '100%',
     height: 575
   },
   filmBottom: {
     position: 'absolute',
-    bottom: -65,
+    bottom: -30,
     left: 0,
     width: '100%',
     height: 575
