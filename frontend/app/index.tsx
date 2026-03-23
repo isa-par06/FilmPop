@@ -37,7 +37,7 @@ export default function Index() {
 const styles=StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#A95050',
+    backgroundColor: '#834141',
   },
   filmTop: {
     position: 'absolute',
