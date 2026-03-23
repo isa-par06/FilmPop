@@ -56,7 +56,7 @@ const styles=StyleSheet.create({
   titleImage: {
     position: 'absolute',
     width: '90%',
-    height: 90,
+    height: 100,
     top: '40%',
     alignSelf: 'center',
   },
