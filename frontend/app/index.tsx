@@ -1,6 +1,10 @@
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+
 //login page
 export default function Index() {
+  const router = useRouter();
+
   return (
     <View style={styles.screen}>
       {/*top film strip*/}
@@ -22,7 +26,7 @@ export default function Index() {
       resizeMode="contain"
       />
       {/*sign-in button image, touchable opacity is used to make it a button later*/}
-      <TouchableOpacity activeOpacity={0.8} style={styles.signInButtonWrapper}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.signInButtonWrapper} onPress={() => router.push('/login')}>
         <Image 
         source={require('../assets/images/signInButton.png')}
         style={styles.signInButtonImage}
