@@ -1,11 +1,56 @@
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
-import {StyleSheet} from 'react-native';
+
 export default function Home() {
+  const router = useRouter();
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>Home Screen!!!</Text>
-      <Navbar />
+      {/*top film strip*/}
+      <Image source={require('../assets/images/homeFilmSticker.png')}
+        style={styles.filmTop}
+        resizeMode="contain"
+      />
+
+      {/*welcome text*/}
+      <Text style={styles.welcome_text}>HI USERNAME!</Text>
+
+      {/*text above filter button*/}
+      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
+
+      {/*text above watchlist button*/}
+      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '54%'}]}>Have something in mind?</Text>
+
+      <View style={styles.buttonsRow}>
+        {/*filter button*/}
+        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
+        onPress={() => router.push('/preferences')}>
+          <Text style={[styles.buttonText, {paddingTop: 11,}]}>FILTER YOUR SELECTION</Text>
+        </TouchableOpacity>
+
+        {/*watchlist button*/}
+        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
+        onPress={() => router.push('/preferences')}>
+          <Text style={[styles.buttonText, {paddingTop: 20,}]}>MY WATCHLIST</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/*text above randomizer button*/}
+      <Text style={[styles.text, {width: '90%', height: 100, top: '48.4%', left: '4%'}]}>Looking for a surprise?</Text>
+
+      {/*randomizer button*/}
+      <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '95%', height: '10%', top: '31%', alignSelf: 'center'}]} 
+      onPress={() => router.push('/preferences')}>
+        <Text style={[styles.buttonText, {paddingTop: 26}]}>MOVIE RANDOMIZER</Text>
+      </TouchableOpacity>
+
+      {/*popcorn image*/}
+      <Image source={require('../assets/images/popcorn.png')}
+        style={styles.popcorn}
+        resizeMode="contain"
+      />
+      
+      <Navbar/>
     </View>
   );
 }
@@ -17,11 +62,56 @@ const styles=StyleSheet.create({
     flex: 1,
     backgroundColor: '#834141',
   },
+  welcome_text: {
+    fontFamily: 'FascinateInline_400Regular',
+    fontSize: 40,
+    color: '#E3DDB9',
+    textShadowColor: '#3D1313',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    top: '12%',
+    left: '6%',
+  },
   text: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 10,
+    color: '#CEABAB',
     position: 'absolute',
-    width: '90%',
-    height: 100,
-    top: '40%',
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    alignItems: 'center',
     alignSelf: 'center',
+    width: '95%',
+    height: '13.6%',
+    top: '27%',
+  },
+  buttonBox: {
+    backgroundColor: '#632020',
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
+    borderRadius: 14,
+  },
+  buttonText: {
+    fontFamily: 'AveriaSerifLibre_400Regular',
+    color: '#E3DDB9',
+    fontSize: 28,
+    display: 'flex',
+    textAlign: 'center',
+  },
+  filmTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: 445
+  },
+  popcorn: {
+    position: 'absolute',
+    height: 222,
+    width: '100%',
+    left: 0,
+    top: '67%',
   },
 })
