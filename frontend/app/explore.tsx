@@ -2,19 +2,19 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
 
-//results recommendations page
-export default function Results() {
+//explore page
+export default function Explore() {
   const router = useRouter();
 
   return (
     <View style={styles.screen}>
-        <Text style={styles.text}>Results Screen!!!</Text>
+        <Text style={styles.text}>Explore Screen!!!</Text>
       <Navbar />
     </View>
   );
 }
 
-//UI styles with positioning
+//UI styles for the explore screen with positioning
 const styles=StyleSheet.create({
   screen: {
     flex: 1,
