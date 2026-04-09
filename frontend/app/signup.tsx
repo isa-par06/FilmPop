@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth } from '../lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../lib/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
-export default function LoginScreen() {
+export default function SignupScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState<User | null>(null);
@@ -18,16 +19,27 @@ export default function LoginScreen() {
     return () => unsubscribe();
   }, []);
 
-  // Login function
-  const handleEmailLogin = async () => {
+  // Signup function
+  const handleEmailSignup = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log('User signed in:', userCredential.user);
-      await AsyncStorage.setItem('userEmail', email);
-      router.push({ pathname: '/home', params: { userEmail: email } });
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      const usersCollection = collection(db, 'users');
+      const emailQuery = query(usersCollection, where('email', '==', email));
+      const emailSnapshot = await getDocs(emailQuery);
+
+      if (emailSnapshot.empty) {
+        await addDoc(usersCollection, { email });
+        console.log('User signed up:', userCredential.user);
+        await AsyncStorage.setItem('userEmail', email);
+        router.push({ pathname: '/home', params: { userEmail: email } });
+      } else {
+        Alert.alert('Account exists', 'Please log in instead');
+        router.push('/login');
+      }
     } catch (error) {
       Alert.alert('Error', 'Invalid email or password');
-      console.log('Error signing in:', error);
+      console.log('Error signing up:', error);
     }
   };
 
@@ -59,7 +71,7 @@ export default function LoginScreen() {
       />
       
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.title}>Create Account</Text>
         
         <TextInput
           style={styles.input}
@@ -81,12 +93,12 @@ export default function LoginScreen() {
           autoCapitalize="none"
         />
         
-        <TouchableOpacity style={styles.button} onPress={handleEmailLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity style={styles.button} onPress={handleEmailSignup}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('/signup')}>
-          <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+        <TouchableOpacity onPress={() => router.push('/login')}>
+          <Text style={styles.linkText}>Already have an account? Log in</Text>
         </TouchableOpacity>
       </View>
     </View>
