@@ -71,12 +71,12 @@ export default function SignupScreen() {
       />
       
       <View style={styles.container}>
-        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.title}>Welcome to FilmPop!</Text>
         
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#999"
+          placeholderTextColor="#CEABAB"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -86,7 +86,7 @@ export default function SignupScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor="#999"
+          placeholderTextColor="#CEABAB"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -94,7 +94,7 @@ export default function SignupScreen() {
         />
         
         <TouchableOpacity style={styles.button} onPress={handleEmailSignup}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>SIGN UP</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push('/login')}>
@@ -131,39 +131,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 32,
+    fontFamily: 'FascinateInline_400Regular',
+    fontSize: 48,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 40,
+    color: '#E3DDB9',
+    marginBottom: 24,
     textAlign: 'center',
+    textShadowColor: '#3D1313',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
   },
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(227, 221, 185, 0.15)',
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
-    color: '#333',
+    color: '#E3DDB9',
+    fontFamily: 'Inter_700Bold',
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
   },
   button: {
     width: '100%',
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: '#632020',
     borderRadius: 8,
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   buttonText: {
-    fontSize: 18,
+    fontFamily: 'AveriaSerifLibre_400Regular',
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#834141',
+    color: '#E3DDB9',
   },
   linkText: {
+    fontFamily: 'Inter_700Bold',
     fontSize: 14,
-    color: '#fff',
+    color: '#E3DDB9',
     textDecorationLine: 'underline',
   },
 });
