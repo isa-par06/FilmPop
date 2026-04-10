@@ -26,7 +26,7 @@ export default function Index() {
       resizeMode="contain"
       />
       {/*sign-in button image, touchable opacity is used to make it a button later*/}
-      <TouchableOpacity activeOpacity={0.8} style={styles.signInButtonWrapper} onPress={() => router.push('/login')}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.signInButtonWrapper} onPress={() => router.push('/signup')}>
         <Image 
         source={require('../assets/images/signInButton.png')}
         style={styles.signInButtonImage}

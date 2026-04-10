@@ -1,26 +1,220 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
+import { useEffect, useState } from "react";
+import { auth, db } from "../lib/firebase";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
-//profile page
 export default function Profile() {
   const router = useRouter();
+  const [profile, setProfile] = useState({
+    email: '',
+    name: '',
+    username: '',
+    favoriteGenre: '',
+  });
+  const [docId, setDocId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editUsername, setEditUsername] = useState('');
+  const [editFavoriteGenre, setEditFavoriteGenre] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const currentEmail = auth.currentUser?.email;
+      if (!currentEmail) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const usersCollection = collection(db, 'users');
+        const emailQuery = query(usersCollection, where('email', '==', currentEmail));
+        const querySnapshot = await getDocs(emailQuery);
+
+        if (!querySnapshot.empty) {
+          const profileDoc = querySnapshot.docs[0];
+          const doc = profileDoc.data();
+          setProfile({
+            email: doc.email || currentEmail,
+            name: doc.name || '',
+            username: doc.username || '',
+            favoriteGenre: doc.favoriteGenre || '',
+          });
+          setDocId(profileDoc.id);
+          setEditName(doc.name || '');
+          setEditUsername(doc.username || '');
+          setEditFavoriteGenre(doc.favoriteGenre || '');
+        } else {
+          setProfile({
+            email: currentEmail,
+            name: '',
+            username: '',
+            favoriteGenre: '',
+          });
+        }
+      } catch (error) {
+        console.log('Error loading profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      router.push('/login');
+    } catch (error) {
+      console.log('Error signing out:', error);
+    }
+  };
+
+  const handleStartEditing = () => {
+    setEditName(profile.name);
+    setEditUsername(profile.username);
+    setEditFavoriteGenre(profile.favoriteGenre);
+    setEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setEditName(profile.name);
+    setEditUsername(profile.username);
+    setEditFavoriteGenre(profile.favoriteGenre);
+    setEditing(false);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!editName.trim() || !editUsername.trim() || !editFavoriteGenre.trim()) {
+      Alert.alert('Please fill in all fields.');
+      return;
+    }
+
+    if (!docId) {
+      Alert.alert('Unable to save profile.');
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, 'users', docId);
+      await updateDoc(userDocRef, {
+        name: editName,
+        username: editUsername,
+        favoriteGenre: editFavoriteGenre,
+      });
+      setProfile({
+        ...profile,
+        name: editName,
+        username: editUsername,
+        favoriteGenre: editFavoriteGenre,
+      });
+      setEditing(false);
+    } catch (error) {
+      console.log('Error updating profile:', error);
+      Alert.alert('Error', 'Could not save your profile.');
+    }
+  };
 
   return (
     <View style={styles.screen}>
-      {/*top film strip*/}
-      <Image 
-      source={require('../assets/images/profileFilmSticker.png')}
-      style={styles.filmTop}
-      resizeMode="contain"
+      <Image
+        source={require('../assets/images/profileFilmSticker.png')}
+        style={styles.filmTop}
+        resizeMode="contain"
       />
+
+      <View style={styles.profileContainer}>
+        <Text style={styles.title}>Your Profile</Text>
+        {loading ? (
+          <Text style={styles.loadingText}>Loading profile...</Text>
+        ) : (
+          <View style={styles.infoCard}>
+            {editing ? (
+              <>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Full Name</Text>
+                  <TextInput
+                    style={styles.editInput}
+                    placeholder="Full name"
+                    placeholderTextColor="#CEABAB"
+                    value={editName}
+                    onChangeText={setEditName}
+                    autoCapitalize="words"
+                  />
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Username</Text>
+                  <TextInput
+                    style={styles.editInput}
+                    placeholder="Username"
+                    placeholderTextColor="#CEABAB"
+                    value={editUsername}
+                    onChangeText={setEditUsername}
+                    autoCapitalize="none"
+                  />
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Favorite Genre</Text>
+                  <TextInput
+                    style={styles.editInput}
+                    placeholder="Favorite genre"
+                    placeholderTextColor="#CEABAB"
+                    value={editFavoriteGenre}
+                    onChangeText={setEditFavoriteGenre}
+                    autoCapitalize="words"
+                  />
+                </View>
+                <View style={styles.actionRow}>
+                  <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile}>
+                    <Text style={styles.saveText}>Save</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.cancelButton} onPress={handleCancelEdit}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Name</Text>
+                  <Text style={styles.value}>{profile.name || 'Not set'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Username</Text>
+                  <Text style={styles.value}>{profile.username || 'Not set'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Email</Text>
+                  <Text style={styles.value}>{profile.email || 'Not set'}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>Favorite Genre</Text>
+                  <Text style={styles.value}>{profile.favoriteGenre || 'Not set'}</Text>
+                </View>
+              </>
+            )}
+          </View>
+        )}
+
+        <TouchableOpacity style={styles.editButton} onPress={handleStartEditing}>
+                  <Text style={styles.editText}>Edit Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+
       <Navbar />
     </View>
   );
 }
 
-//UI styles for the profile screen with positioning
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#834141',
@@ -30,6 +224,122 @@ const styles=StyleSheet.create({
     top: 0,
     left: 0,
     width: '100%',
-    height: 445
+    height: 445,
   },
-})
+  profileContainer: {
+    marginTop: 120,
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  title: {
+    fontFamily: 'FascinateInline_400Regular',
+    fontSize: 40,
+    color: '#E3DDB9',
+    textShadowColor: '#3D1313',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    marginBottom: 20,
+  },
+  loadingText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+    color: '#CEABAB',
+  },
+  infoCard: {
+    width: '100%',
+    backgroundColor: 'rgba(99, 32, 32, 0.8)',
+    borderRadius: 16,
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
+    padding: 20,
+  },
+  infoRow: {
+    marginBottom: 18,
+  },
+  label: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 14,
+    color: '#CEABAB',
+    marginBottom: 6,
+  },
+  value: {
+    fontFamily: 'AveriaSerifLibre_400Regular',
+    fontSize: 18,
+    color: '#E3DDB9',
+  },
+  signOutButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#CEABAB',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  signOutText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+    color: '#834141',
+  },
+  editInput: {
+    width: '100%',
+    height: 48,
+    backgroundColor: 'rgba(227, 221, 185, 0.15)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E3DDB9',
+    paddingHorizontal: 12,
+    color: '#E3DDB9',
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+  },
+  editButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#CEABAB',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  editText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+    color: '#834141',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 12,
+  },
+  saveButton: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#E3DDB9',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  saveText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+    color: '#834141',
+  },
+  cancelButton: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#632020',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E3DDB9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cancelText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 16,
+    color: '#E3DDB9',
+  },
+});

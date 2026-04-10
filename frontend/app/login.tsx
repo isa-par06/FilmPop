@@ -1,10 +1,8 @@
-// frontend/screens/LoginScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth, db } from '../lib/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { auth } from '../lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { User } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
@@ -30,30 +28,6 @@ export default function LoginScreen() {
     } catch (error) {
       Alert.alert('Error', 'Invalid email or password');
       console.log('Error signing in:', error);
-    }
-  };
-
-  // Signup function
-  const handleEmailSignup = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-      const usersCollection = collection(db, 'users');
-      const emailQuery = query(usersCollection, where('email', '==', email));
-      const emailSnapshot = await getDocs(emailQuery);
-
-      if (emailSnapshot.empty) {
-        await addDoc(usersCollection, { email });
-        console.log('User signed up:', userCredential.user);
-        await AsyncStorage.setItem('userEmail', email);
-        router.push({ pathname: '/home', params: { userEmail: email } });
-      } else {
-        Alert.alert('Login Instead');
-        console.log('User with the email already exists.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Invalid email or password');
-      console.log('Error signing up:', error);
     }
   };
 
@@ -85,12 +59,12 @@ export default function LoginScreen() {
       />
       
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome to FilmPop!</Text>
+        <Text style={styles.title}>Welcome Back!</Text>
         
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#999"
+          placeholderTextColor="#CEABAB"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -100,7 +74,7 @@ export default function LoginScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor="#999"
+          placeholderTextColor="#CEABAB"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -108,11 +82,11 @@ export default function LoginScreen() {
         />
         
         <TouchableOpacity style={styles.button} onPress={handleEmailLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.button} onPress={handleEmailSignup}>
-          <Text style={styles.buttonText}>Signup</Text>
+
+        <TouchableOpacity onPress={() => router.push('/signup')}>
+          <Text style={styles.linkText}>Don't have an account? Sign up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -145,34 +119,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 32,
+    fontFamily: 'FascinateInline_400Regular',
+    fontSize: 48,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 40,
+    color: '#E3DDB9',
+    marginBottom: 24,
     textAlign: 'center',
+    textShadowColor: '#3D1313',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
   },
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(227, 221, 185, 0.15)',
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
-    color: '#333',
+    color: '#E3DDB9',
+    fontFamily: 'Inter_700Bold',
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
   },
   button: {
     width: '100%',
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: '#632020',
     borderRadius: 8,
+    borderColor: '#E3DDB9',
+    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   buttonText: {
-    fontSize: 18,
+    fontFamily: 'AveriaSerifLibre_400Regular',
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#834141',
+    color: '#E3DDB9',
+  },
+  linkText: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 14,
+    color: '#E3DDB9',
+    textDecorationLine: 'underline',
   },
 });
