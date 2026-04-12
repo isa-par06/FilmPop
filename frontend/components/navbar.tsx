@@ -1,9 +1,15 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity, ImageBackground } from "react-native";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 //navbar component
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  //function to determine the opacity of the navbar icons (the page the user is on will be opaque and the rest will be at 60% opacity)
+  const getOpacity = (path: string) => {
+    return pathname === path ? 1 : 0.6; 
+  };
 
   return (
     <ImageBackground
@@ -15,7 +21,7 @@ export default function Navbar() {
     {/*container to hold buttons - to be able to change their positions*/}
     <View style={styles.buttonRow}>
       {/*home button*/}
-      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/home')}>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/home')} style={{opacity: getOpacity('/home')}}>
               <Image 
               source={require('../assets/images/homeButton.png')}
               style={styles.navbarIcons}
@@ -25,7 +31,7 @@ export default function Navbar() {
       </TouchableOpacity>
 
       {/*explore button*/}
-      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/explore')}>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/explore')} style={{opacity: getOpacity('/explore')}}>
               <Image 
               source={require('../assets/images/exploreButton.png')}
               style={styles.navbarIcons}
@@ -35,7 +41,7 @@ export default function Navbar() {
       </TouchableOpacity>
 
       {/*profile button*/}
-      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')} style={{opacity: getOpacity('/profile')}}>
               <Image 
               source={require('../assets/images/profileButton.png')}
               style={styles.navbarIcons}
@@ -65,14 +71,15 @@ const styles=StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 85,
-
+    paddingHorizontal: 76,
+    left: 3,
   },
   navbarIcons: {
     width: 46,
     height: 46,
   },
   navText: {
+    fontFamily: 'AveriaSerifLibre_400Regular',
     fontSize: 10,
     color: "#E3DDB9",
     textAlign: "center",
