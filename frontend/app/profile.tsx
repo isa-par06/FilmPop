@@ -126,9 +126,38 @@ export default function Profile() {
         style={styles.filmTop}
         resizeMode="contain"
       />
+      {/* profile top section */}
+      <View style={styles.topSection}>
+        <Image 
+            source={require('../assets/images/profileTop.png')}
+            style={styles.profileTop}
+            resizeMode="contain"
+        />
+
+        <View style={styles.usernameOverlay}>
+          {editing ? (
+                    <TextInput
+                      style={styles.usernameText}
+                      placeholder="Username"
+                      placeholderTextColor="#CEABAB"
+                      value={editUsername}
+                      onChangeText={setEditUsername}
+                      autoCapitalize="characters"
+                    />
+          ) : (
+            <Text style={styles.usernameText}>
+              {(profile.username || 'Not set')}</Text>
+          )}
+        </View>
+        
+      </View>
+
 
       <View style={styles.profileContainer}>
-        <Text style={styles.title}>Your Profile</Text>
+      <Image 
+        source={require('../assets/images/profileLabel.png')} 
+        style={styles.profileLabel} 
+        resizeMode="contain" />
         {loading ? (
           <Text style={styles.loadingText}>Loading profile...</Text>
         ) : (
@@ -199,18 +228,44 @@ export default function Profile() {
             )}
           </View>
         )}
-
-        <TouchableOpacity style={styles.editButton} onPress={handleStartEditing}>
-                  <Text style={styles.editText}>Edit Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-          <Text style={styles.signOutText}>Sign Out</Text>
-        </TouchableOpacity>
       </View>
+
+    {/*tickets nav area*/}
+    {!editing && (
+    <View style={styles.ticketRow}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={handleStartEditing}>
+              <Image 
+              source={require('../assets/images/ticket1.png')}
+              style={styles.ticketImage}
+              resizeMode="contain"
+              />
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={()=>{}}>
+              <Image 
+              source={require('../assets/images/ticket2.png')}
+              style={styles.ticketImage}
+              resizeMode="contain"
+              />
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={handleSignOut}>
+              <Image 
+              source={require('../assets/images/ticket3.png')}
+              style={styles.ticketImage}
+              resizeMode="contain"
+              />
+      </TouchableOpacity>
+    </View>
+    )}
+
+    {/*popcorn image*/}
+          <Image source={require('../assets/images/popcorn.png')}
+            style={styles.popcorn}
+            resizeMode="contain"
+          />
 
       <Navbar />
     </View>
+
   );
 }
 
@@ -227,9 +282,43 @@ const styles = StyleSheet.create({
     height: 445,
   },
   profileContainer: {
-    marginTop: 120,
+    position: 'relative',
+    marginTop: 20,
     alignItems: 'center',
     paddingHorizontal: 24,
+    zIndex: 1,
+  },
+  topSection: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 75,
+  },
+  profileTop: {
+    width: '100%',
+    height: 220,
+  },
+  profileLabel: {
+    position: 'absolute',
+    width: 330,
+    height: 50,
+    zIndex: 2,
+    marginTop: -5,
+  },
+  usernameOverlay: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top:110,
+    left: 0,
+    right: 0,
+  },
+  usernameText:{
+    fontFamily: 'FascinateInline_400Regular',
+    fontSize: 33,
+    color: '#632020',
+    textAlign: 'center',
+    marginTop: 10,
   },
   title: {
     fontFamily: 'FascinateInline_400Regular',
@@ -252,6 +341,9 @@ const styles = StyleSheet.create({
     borderColor: '#E3DDB9',
     borderWidth: 1,
     padding: 20,
+    paddingTop: 30,
+    paddingBottom: 0,
+    marginTop: 20,
   },
   infoRow: {
     marginBottom: 18,
@@ -321,6 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
+    marginTop: -10,
   },
   saveText: {
     fontFamily: 'Inter_700Bold',
@@ -336,10 +429,36 @@ const styles = StyleSheet.create({
     borderColor: '#E3DDB9',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: -10,
+    marginBottom: 10,
   },
   cancelText: {
     fontFamily: 'Inter_700Bold',
     fontSize: 16,
     color: '#E3DDB9',
+  },
+  ticketRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 5,
+    paddingHorizontal: 20,
+    zIndex: 10,
+  },
+  ticketButton: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  ticketImage: {
+    width: 121,
+    height: 64,
+  },
+  popcorn: {
+    position: 'absolute',
+    height: 238,
+    width: '100%',
+    left: 0,
+    top: '67%',
   },
 });
