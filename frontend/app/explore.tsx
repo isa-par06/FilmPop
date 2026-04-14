@@ -14,6 +14,7 @@ export default function Explore() {
 
   const [movies, setMovies] = useState<Movie[]>([]);
 
+  //getting the movie data from the API and formatting it for the explore grid (+ sorting it in alphabetical order)
   useEffect(() => {
       const loadMovies = async () => {
         const data = await MovieswithStreamingInformation();
@@ -49,6 +50,7 @@ export default function Explore() {
       {/*title for movies*/}
       <Text style={styles.text}>Movies A-Z</Text>
 
+      {/*explore grid of movies*/}
       <View style={styles.gridContainer}>
         <ExploreGrid movies={movies}/>
       </View>

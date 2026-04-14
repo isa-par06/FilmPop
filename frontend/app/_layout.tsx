@@ -9,6 +9,7 @@ import { useEffect } from "react";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+
   //used to load in the main font, plus it keeps the splash screen until the font is fully loaded (font from google btw)
   const [loaded, error] = useFonts({
     FascinateInline_400Regular,
