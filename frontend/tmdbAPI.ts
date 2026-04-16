@@ -24,6 +24,29 @@ const GENRE_MAP: { [key:string]: number} = {
     animation: 16,
     adventure: 12
 }
+
+//being used outside this file, need to export it unlike genre_map
+export const GENRE_ID_TO_NAME: { [key:string]: string} = {
+    28: "Action",
+    37: "Western",
+    10752: "War",
+    53: "Thriller", 
+    10770: "TV Movie",
+    878: "Science Fiction",
+    10749: "Romance",
+    9648: "Mystery",
+    10402: "Music",
+    27: "Horror",
+    36: "History",
+    14: "Fantasy",
+    10751: "Family",
+    18: "Drama",
+    99: "Documentary",
+    80: "Crime",
+    35: "Comedy",
+    16: "Animation",
+    12: "Adventure"
+}
     
 
 /* USING THESE FUNCTIONS:
