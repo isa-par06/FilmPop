@@ -1,9 +1,10 @@
 import ResultsCarousel, { Movie } from "@/components/resultsCarousel";
-import { MovieswithStreamingInformation } from "@/tmdbAPI";
+import { MovieswithAdditionalInformation } from "@/tmdbAPI";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
+import {GENRE_ID_TO_NAME} from "../tmdbAPI";
 
 //results recommendations page
 export default function Results() {
@@ -13,7 +14,7 @@ export default function Results() {
 
   useEffect(() => {
     const loadMovies = async () => {
-      const data = await MovieswithStreamingInformation();
+      const data = await MovieswithAdditionalInformation();
 
       const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
       const formattedMovies = data.map((movie: any) => ({
@@ -21,7 +22,7 @@ export default function Results() {
         poster_URL: `${IMAGE_BASE}${movie.poster_path}`,
         title: movie.title,
         year: movie.release_date?.split("-")[0] || "N/A",
-        genre: movie.genre_ids,
+        genre: (movie.genre_ids || []).map((id: number) => GENRE_ID_TO_NAME[String(id)] || "Unknown"),
         duration: 'N/A', //placeholder
         streaming: movie.streaming,
         match: 'N/A', //placeholder
