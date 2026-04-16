@@ -222,6 +222,23 @@ export async function MovieswithAdditionalInformation(){
     return moviesExtraInfo;
 }
 
+//function for randomizer so only 1 movie is loaded at a time
+export async function RandomMovieWithAdditionalInformation(){
+    const movies = await fetchMovieData();
+    if (!movies || movies.length === 0) {
+        console.error('No movies found');
+        return null;
+    }
+    const randomMovie=movies[Math.floor(Math.random() * movies.length)];
+    const streaming = await fetchStreamingData(randomMovie.id);
+    const movieLength = await fetchMovieLength(randomMovie.id);
+    const movieAttributes = Object.assign({}, randomMovie, {streaming: streaming,
+        runtime: movieLength
+    });
+    return movieAttributes
+}
+
+
 export function filterUsingGenre (movies: any[], selectedGenre: string[]){
     const genreIDS = selectedGenre.map((genre)=> GENRE_MAP[genre.toLowerCase()]);
     
