@@ -1,8 +1,8 @@
 import ResultsCarousel, { Movie } from "@/components/resultsCarousel";
-import { MovieswithStreamingInformation } from "@/tmdbAPI";
+import { MovieswithAdditionalInformation } from "@/tmdbAPI";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
 
 //results recommendations page
@@ -13,7 +13,7 @@ export default function Results() {
 
   useEffect(() => {
     const loadMovies = async () => {
-      const data = await MovieswithStreamingInformation();
+      const data = await MovieswithAdditionalInformation();
 
       const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
       const formattedMovies = data.map((movie: any) => ({
@@ -22,7 +22,7 @@ export default function Results() {
         title: movie.title,
         year: movie.release_date?.split("-")[0] || "N/A",
         genre: movie.genre_ids,
-        duration: 'N/A', //placeholder
+        duration: movie.runtime + " mins",
         streaming: movie.streaming,
         match: 'N/A', //placeholder
       }));
@@ -58,6 +58,7 @@ export default function Results() {
 
       {/*info under carousel about the selected movie*/}
       <View style={styles.carouselText}>
+        <ScrollView style={styles.scroll}>
         {selectedMovie && (
           <>
             <Text style={[styles.movieTitle, {position: 'absolute', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 1}]}>{selectedMovie.title.toUpperCase()}</Text>
@@ -75,6 +76,7 @@ export default function Results() {
             <Text style={styles.movieInfo}> Genre: {selectedMovie.genre?.join(", ")} | Duration: {selectedMovie.duration} | Year: {selectedMovie.year} | Found On: {selectedMovie.streaming?.join(", ")}</Text>
           </>
         )}
+        </ScrollView>
       </View>
 
       {/*button row at the bottom of the page (edit selection - add to watchlist - restart)*/}
@@ -146,9 +148,11 @@ const styles=StyleSheet.create({
   carouselText: {
     top: '61%',
     width: '95%',
-    height: '20%',
-    alignItems: 'center',
+    height: '14%',
     alignSelf: 'center',
+  },
+  scroll: {
+
   },
   movieTitle: {
     fontFamily: 'AveriaSerifLibre_700Bold',
@@ -173,6 +177,6 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     width: '90%',
-    top: '56%',
+    top: '62%',
   },
 })

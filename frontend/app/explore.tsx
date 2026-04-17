@@ -1,6 +1,6 @@
 import ExploreGrid from "@/components/exploreGrid";
 import { Movie } from "@/components/resultsCarousel";
-import { MovieswithStreamingInformation } from "@/tmdbAPI";
+import { MovieswithAdditionalInformation } from "@/tmdbAPI";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
@@ -16,7 +16,7 @@ export default function Explore() {
 
   useEffect(() => {
       const loadMovies = async () => {
-        const data = await MovieswithStreamingInformation();
+        const data = await MovieswithAdditionalInformation();
   
         const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
         const formattedMovies = data.map((movie: any) => ({
@@ -25,7 +25,7 @@ export default function Explore() {
           title: movie.title,
           year: movie.release_date?.split("-")[0] || "N/A",
           genre: movie.genre_ids,
-          duration: 'N/A', //placeholder
+          duration: movie.runtime + " mins",
           streaming: movie.streaming,
           match: 'N/A', //placeholder
         }));
