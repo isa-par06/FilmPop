@@ -11,7 +11,7 @@ import Navbar from "../components/navbar";
 export default function Explore() {
   const router = useRouter();
   const [text, setText] = useState('');
-
+  const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
@@ -32,10 +32,26 @@ export default function Explore() {
 
         //sort in alphabetical order by title
         const sorted = formattedMovies.sort((movie_a, movie_b) => movie_a.title.localeCompare(movie_b.title));
+        setAllMovies(sorted);
         setMovies(sorted);
       };
     loadMovies();
   }, []);
+
+  // Handle search as user types
+  useEffect(() => {
+    if (text.trim() === '') {
+      // Show all movies if search is empty
+      setMovies(allMovies);
+    } else {
+      // Filter movies from the loaded dataset only
+      const searchQuery = text.toLowerCase();
+      const filteredMovies = allMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchQuery)
+      );
+      setMovies(filteredMovies);
+    }
+  }, [text, allMovies]);
       
 
   return (
@@ -47,7 +63,7 @@ export default function Explore() {
       </View>
 
       {/*title for movies*/}
-      <Text style={styles.text}>Movies A-Z</Text>
+      <Text style={styles.text}>{text.trim() ? 'Search Results' : 'Movies A-Z'}</Text>
 
       <View style={styles.gridContainer}>
         <ExploreGrid movies={movies}/>
