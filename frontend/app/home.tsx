@@ -1,9 +1,38 @@
 import { useRouter } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
+import { useEffect, useState } from "react";
+import { auth, db } from "../lib/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function Home() {
   const router = useRouter();
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const loadUserName = async () => {
+      const currentEmail = auth.currentUser?.email;
+      if (!currentEmail) {
+        return;
+      }
+
+      try {
+        const usersCollection = collection(db, 'users');
+        const emailQuery = query(usersCollection, where('email', '==', currentEmail));
+        const querySnapshot = await getDocs(emailQuery);
+
+        if (!querySnapshot.empty) {
+          const profileDoc = querySnapshot.docs[0];
+          const doc = profileDoc.data();
+          setUserName(doc.name || '');
+        }
+      } catch (error) {
+        console.log('Error loading user name:', error);
+      }
+    };
+
+    loadUserName();
+  }, []);
   return (
     <View style={styles.screen}>
       {/*top film strip*/}
@@ -13,7 +42,7 @@ export default function Home() {
       />
 
       {/*welcome text*/}
-      <Text style={styles.welcome_text}>HI USERNAME!</Text>
+      <Text style={styles.welcome_text}>HI {userName.toUpperCase()}!</Text>
 
       {/*text above filter button*/}
       <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
