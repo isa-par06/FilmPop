@@ -58,6 +58,7 @@ export default function Results() {
 
       {/*info under carousel about the selected movie*/}
       <View style={styles.carouselText}>
+
         <ScrollView style={styles.scroll}>
         {selectedMovie && (
           <>

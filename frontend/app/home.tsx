@@ -102,10 +102,10 @@ const styles=StyleSheet.create({
   },
   filmTop: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: 445
+    top: 6,
+    left: -20,
+    width: '110%',
+    height: 480
   },
   popcorn: {
     position: 'absolute',
