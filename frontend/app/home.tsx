@@ -25,13 +25,13 @@ export default function Home() {
         {/*filter button*/}
         <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
         onPress={() => router.push('/preferences')}>
-          <Text style={[styles.buttonText, {paddingTop: 11,}]}>FILTER YOUR SELECTION</Text>
+          <Text style={[styles.buttonText]}>FILTER YOUR SELECTION</Text>
         </TouchableOpacity>
 
         {/*watchlist button*/}
         <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
         onPress={() => router.push('/preferences')}>
-          <Text style={[styles.buttonText, {paddingTop: 20,}]}>MY WATCHLIST</Text>
+          <Text style={[styles.buttonText]}>MY WATCHLIST</Text>
         </TouchableOpacity>
       </View>
 
@@ -41,7 +41,7 @@ export default function Home() {
       {/*randomizer button*/}
       <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '95%', height: '10%', top: '31%', alignSelf: 'center'}]} 
       onPress={() => router.push('/results')}>
-        <Text style={[styles.buttonText, {paddingTop: 26}]}>GO TO RESULTS PAGE</Text>
+        <Text style={[styles.buttonText]}>GO TO RESULTS PAGE</Text>
       </TouchableOpacity>
 
       {/*popcorn image*/}
@@ -92,6 +92,7 @@ const styles=StyleSheet.create({
     borderColor: '#E3DDB9',
     borderWidth: 1,
     borderRadius: 14,
+    justifyContent: 'center',
   },
   buttonText: {
     fontFamily: 'AveriaSerifLibre_400Regular',

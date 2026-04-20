@@ -59,7 +59,7 @@ export default function Results() {
       {/*info under carousel about the selected movie*/}
       <View style={styles.carouselText}>
 
-        <ScrollView style={styles.scroll}>
+        <ScrollView>
         {selectedMovie && (
           <>
             <Text style={[styles.movieTitle, {position: 'absolute', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 1}]}>{selectedMovie.title.toUpperCase()}</Text>
@@ -151,9 +151,6 @@ const styles=StyleSheet.create({
     width: '95%',
     height: '14%',
     alignSelf: 'center',
-  },
-  scroll: {
-
   },
   movieTitle: {
     fontFamily: 'AveriaSerifLibre_700Bold',
