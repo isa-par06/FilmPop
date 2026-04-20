@@ -16,22 +16,14 @@ export default function Home() {
       <Text style={styles.welcome_text}>HI USERNAME!</Text>
 
       {/*text above filter button*/}
-      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
+      <Text style={[styles.text, {width: '90%', height: 100, top: '32.2%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
 
-      {/*text above watchlist button*/}
-      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '54%'}]}>Have something in mind?</Text>
 
       <View style={styles.buttonsRow}>
         {/*filter button*/}
-        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
+        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '100%', height: '80%'}]} 
         onPress={() => router.push('/preferences')}>
           <Text style={[styles.buttonText]}>FILTER YOUR SELECTION</Text>
-        </TouchableOpacity>
-
-        {/*watchlist button*/}
-        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
-        onPress={() => router.push('/preferences')}>
-          <Text style={[styles.buttonText]}>MY WATCHLIST</Text>
         </TouchableOpacity>
       </View>
 

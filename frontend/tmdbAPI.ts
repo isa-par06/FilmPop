@@ -1,6 +1,6 @@
 //CITATION: Medium, How to Fetch and Display Movie List Using TMDB API
 
-const apiKey = '10c6c5ea756731e81e1748979a8d4cd9';
+const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
 //genre mapping, api provides genre in #, convert to strings, easier to read!
 const GENRE_MAP: { [key:string]: number} = {
@@ -23,6 +23,29 @@ const GENRE_MAP: { [key:string]: number} = {
     comedy: 35,
     animation: 16,
     adventure: 12
+}
+
+//being used outside this file, need to export it unlike genre_map
+export const GENRE_ID_TO_NAME: { [key:string]: string} = {
+    28: "Action",
+    37: "Western",
+    10752: "War",
+    53: "Thriller", 
+    10770: "TV Movie",
+    878: "Science Fiction",
+    10749: "Romance",
+    9648: "Mystery",
+    10402: "Music",
+    27: "Horror",
+    36: "History",
+    14: "Fantasy",
+    10751: "Family",
+    18: "Drama",
+    99: "Documentary",
+    80: "Crime",
+    35: "Comedy",
+    16: "Animation",
+    12: "Adventure"
 }
     
 
@@ -198,6 +221,23 @@ export async function MovieswithAdditionalInformation(){
     //list of movies now with a streaming service property
     return moviesExtraInfo;
 }
+
+//function for randomizer so only 1 movie is loaded at a time
+export async function RandomMovieWithAdditionalInformation(){
+    const movies = await fetchMovieData();
+    if (!movies || movies.length === 0) {
+        console.error('No movies found');
+        return null;
+    }
+    const randomMovie=movies[Math.floor(Math.random() * movies.length)];
+    const streaming = await fetchStreamingData(randomMovie.id);
+    const movieLength = await fetchMovieLength(randomMovie.id);
+    const movieAttributes = Object.assign({}, randomMovie, {streaming: streaming,
+        runtime: movieLength
+    });
+    return movieAttributes
+}
+
 
 export function filterUsingGenre (movies: any[], selectedGenre: string[]){
     const genreIDS = selectedGenre.map((genre)=> GENRE_MAP[genre.toLowerCase()]);

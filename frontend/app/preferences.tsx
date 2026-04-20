@@ -4,16 +4,41 @@ import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
 
+
 //preference questions page
 export default function Preferences() {
   const router = useRouter();
-  const [duration, setDuration] = useState([50, 120]);
+
+  //states for all of the preference options
+  const [duration, setDuration] = useState([60, 160]);
   const [selGenres, setSelGenres] = useState<string[]>([]);
-  const [selMoods, setSelMoods] = useState<string[]>([]);
+  const [selMood, setSelMood] = useState<string>("");
   const [selServices, setSelServices] = useState<string[]>([]);
 
+
+  //hard coded options for moods, genres, and subscription services
   const moods = ["happy", "scared", "romantic", "curious", "adventurous"];
   const genres = ["action", "western", "war", "thriller", "tv movie", "science fiction", "romance", "mystery", "music", "horror", "history", "fantasy", "family", "drama", "documentary", "crime", "comedy", "animation", "adventure"];
+  const services = ["Netflix", "HBO", "Peacock", "Prime Video", "Disney Plus", "Hulu", "Paramount Plus", "Apple TV"];
+
+
+  //helper function used when submitting the preferences to the results page
+  const handleSubmit = () => {
+    const filters = {
+      minTime: duration[0],
+      maxTime: duration[1],
+      mood: selMood,
+      genres: selGenres,
+      services: selServices,
+    };
+
+    router.push({
+      pathname: "/results",
+      params: {
+        filters: JSON.stringify(filters),
+      },
+    });
+  };
 
 
   return (
@@ -24,27 +49,32 @@ export default function Preferences() {
         resizeMode="contain"
       />
       
+      {/*title*/}
       <Text style={styles.title}>MAKE YOUR SELECTION!</Text>
 
+      {/*everything inside the element that scrolls (questions + options + buttons at the end)*/}
       <View style={styles.scrollView}>
         <ScrollView contentContainerStyle={{ paddingBottom: 226 }}>
+
+        {/*MOOD QUESTION*/}
           <Text style={[styles.questions, {}]}>What mood are you feeling for today?</Text>
 
           <View style= {styles.buttonsContainer}>
             {moods.map((mood) => {
             return (
-              <TouchableOpacity key={mood} style={[styles.buttonBox, selMoods.includes(mood) ? {borderColor: '#C7AF95'} : {borderColor: '#411B1B'}]} activeOpacity={0.8} 
+              <TouchableOpacity key={mood} style={[styles.buttonBox, selMood.includes(mood) ? {borderColor: '#C7AF95'} : {borderColor: '#411B1B'}]} activeOpacity={0.8} 
                 onPress={() => {
-                  if (selMoods.includes(mood)) { setSelMoods(selMoods => selMoods.filter(item => item !== mood)); } 
-                  else { setSelMoods(selMoods => [...selMoods, mood]); }
+                  if (selMood.includes(mood)) { setSelMood(""); } 
+                  else { setSelMood(mood); }
                 }
               }>
-                <Text style={[styles.button, selMoods.includes(mood) ? {color: '#C7AF95'} : {color: '#834141'}]}>{mood.toUpperCase()}</Text>
+                <Text style={[styles.button, selMood.includes(mood) ? {color: '#C7AF95'} : {color: '#834141'}]}>{mood.toUpperCase()}</Text>
               </TouchableOpacity>
             )
           })}
           </View>
 
+        {/*GENRE QUESTION*/}
           <Text style={[styles.questions, {}]}>What genre do you prefer?</Text>
 
           <View style= {styles.buttonsContainer}>
@@ -60,16 +90,33 @@ export default function Preferences() {
           })}
           </View>
 
+        {/*SUBSCRIPTION SERVICE QUESTION*/}
           <Text style={[styles.questions, {}]}>What subscription services are avaliable to you?</Text>
+
+          <View style= {styles.buttonsContainer}>
+            {services.map((service) => {
+              return (
+                <TouchableOpacity key={service} style={[styles.buttonBox, selServices.includes(service) ? {borderColor: '#C7AF95'} : {borderColor: '#411B1B'}]} activeOpacity={0.8} onPress={() => {
+                  if (selServices.includes(service)) { setSelServices(selServices => selServices.filter(item => item !== service)); } 
+                  else { setSelServices(selServices => [...selServices, service]); }
+                }}>
+                  <Text style={[styles.button, selServices.includes(service) ? {color: '#C7AF95'} : {color: '#834141'}]}>{service.toUpperCase()}</Text>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+
+        {/*DURATION QUESTION*/}
           <Text style={[styles.questions, {}]}>How long would you like your film to be?</Text>
 
+          {/* used a slider component to make the time range */}
           <View style={[{alignSelf: 'center', width: '90%'}]}>
             <Slider 
                 value={duration}
                 onValueChange={val => setDuration(val)}
                 step={10}
-                minimumValue={20}
-                maximumValue={160}
+                minimumValue={50}
+                maximumValue={200}
                 minimumTrackTintColor="#632020"
                 maximumTrackTintColor="#C7AF95"
                 thumbTintColor="#632020"
@@ -78,10 +125,12 @@ export default function Preferences() {
                 thumbStyle={styles.thumb}
                 containerStyle={styles.sliderContainer}
             />
+          {/* text showcasing range of slider*/}
             <View style={[styles.sliderTextRow, {marginTop: '16%', width: '105%'}]}>
-              <Text style={[{fontFamily: 'Inter_400Regular_Italic', fontSize: 14, color: '#E3DDB9'}]}>20 mins</Text>
-              <Text style={[{fontFamily: 'Inter_400Regular_Italic', fontSize: 14, color: '#E3DDB9'}]}>160 mins</Text>
+              <Text style={[{fontFamily: 'Inter_400Regular_Italic', fontSize: 14, color: '#E3DDB9'}]}>50 mins</Text>
+              <Text style={[{fontFamily: 'Inter_400Regular_Italic', fontSize: 14, color: '#E3DDB9'}]}>200 mins</Text>
             </View>
+          {/* text displaying what numbers the user is on for the slider*/}
             <View style={[styles.timeText, {marginTop: '26%'}]}>
               <Text style={styles.timeDisplay}>{duration[0]}</Text>
               <Text style={[{fontFamily: 'Inter_700Bold', fontSize: 24, color: '#E3DDB9'}]}>-</Text>
@@ -93,17 +142,13 @@ export default function Preferences() {
             </View>
           </View>
 
-
+        {/* buttons at the button of the screen (clear selection - submit selection)*/}
           <View style={styles.ticketButtonsRow}>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => {setDuration([50, 120]), setSelGenres([]), setSelMoods([])}}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => {setDuration([60, 160]),  setSelMood(""), setSelGenres([]), setSelServices([])}}>
               <Image source={require('../assets/images/preferencesClearSelection.png')}/>
             </TouchableOpacity>
 
-            <TouchableOpacity activeOpacity={0.8} onPress={() => router.push({
-                pathname: '/results', 
-                params: {minTime: duration[0], maxTime: duration[1], genres: selGenres, moods: selMoods}
-              }
-            )}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => {handleSubmit()}}>
               <Image source={require('../assets/images/preferencesSubmitSelection.png')}/>
             </TouchableOpacity>
           </View>
