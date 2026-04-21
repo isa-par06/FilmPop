@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
-import { useEffect, useState } from "react";
 import { auth, db } from "../lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function Home() {
   const router = useRouter();
