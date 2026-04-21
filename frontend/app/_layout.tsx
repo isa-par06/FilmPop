@@ -1,6 +1,6 @@
 import { AveriaSerifLibre_400Regular, AveriaSerifLibre_700Bold } from '@expo-google-fonts/averia-serif-libre';
 import { FascinateInline_400Regular, useFonts } from '@expo-google-fonts/fascinate-inline';
-import { Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
+import { Inter_400Regular, Inter_400Regular_Italic, Inter_700Bold } from '@expo-google-fonts/inter';
 import { Stack } from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
@@ -14,6 +14,7 @@ export default function RootLayout() {
     FascinateInline_400Regular,
     Inter_700Bold,
     Inter_400Regular,
+    Inter_400Regular_Italic,
     AveriaSerifLibre_400Regular,
     AveriaSerifLibre_700Bold,
   });

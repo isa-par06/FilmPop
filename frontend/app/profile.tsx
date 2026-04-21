@@ -1,10 +1,10 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import Navbar from "../components/navbar";
-import { useEffect, useState } from "react";
-import { auth, db } from "../lib/firebase";
-import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Navbar from "../components/navbar";
+import { auth, db } from "../lib/firebase";
 
 export default function Profile() {
   const router = useRouter();
@@ -236,13 +236,6 @@ export default function Profile() {
       <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={handleStartEditing}>
               <Image 
               source={require('../assets/images/ticket1.png')}
-              style={styles.ticketImage}
-              resizeMode="contain"
-              />
-      </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={()=>{}}>
-              <Image 
-              source={require('../assets/images/ticket2.png')}
               style={styles.ticketImage}
               resizeMode="contain"
               />

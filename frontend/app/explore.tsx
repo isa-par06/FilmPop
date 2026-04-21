@@ -25,7 +25,7 @@ export default function Explore() {
           title: movie.title,
           year: movie.release_date?.split("-")[0] || "N/A",
           genre: movie.genre_ids,
-          duration: 'N/A', //placeholder
+          duration: movie.runtime + " mins",
           streaming: movie.streaming,
           match: 'N/A', //placeholder
         }));

@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
-import { useEffect, useState } from "react";
 import { auth, db } from "../lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function Home() {
   const router = useRouter();
@@ -45,22 +45,14 @@ export default function Home() {
       <Text style={styles.welcome_text}>HI {userName.toUpperCase()}!</Text>
 
       {/*text above filter button*/}
-      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
+      <Text style={[styles.text, {width: '90%', height: 100, top: '32.2%', left: '4%'}]}>Ready to watch the perfect movie?</Text>
 
-      {/*text above watchlist button*/}
-      <Text style={[styles.text, {width: '90%', height: 100, top: '31%', left: '54%'}]}>Have something in mind?</Text>
 
       <View style={styles.buttonsRow}>
         {/*filter button*/}
-        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
+        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '100%', height: '80%'}]} 
         onPress={() => router.push('/preferences')}>
-          <Text style={[styles.buttonText, {paddingTop: 11,}]}>FILTER YOUR SELECTION</Text>
-        </TouchableOpacity>
-
-        {/*watchlist button*/}
-        <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '48%', height: '100%'}]} 
-        onPress={() => router.push('/preferences')}>
-          <Text style={[styles.buttonText, {paddingTop: 20,}]}>MY WATCHLIST</Text>
+          <Text style={[styles.buttonText]}>FILTER YOUR SELECTION</Text>
         </TouchableOpacity>
       </View>
 
@@ -71,12 +63,6 @@ export default function Home() {
       <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '95%', height: '10%', top: '31%', alignSelf: 'center'}]} 
       onPress={() => router.push('/random')}>
         <Text style={[styles.buttonText, {paddingTop: 26}]}>MOVIE RANDOMIZER</Text>
-      </TouchableOpacity>
-
-      {/*results TEMP button*/}
-      <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '40%', height: '10%', top: '32%', alignSelf: 'center'}]} 
-      onPress={() => router.push('/results')}>
-        <Text style={[styles.buttonText, {paddingTop: 26}]}>RESULTS</Text>
       </TouchableOpacity>
 
       {/*popcorn image*/}
@@ -127,6 +113,7 @@ const styles=StyleSheet.create({
     borderColor: '#E3DDB9',
     borderWidth: 1,
     borderRadius: 14,
+    justifyContent: 'center',
   },
   buttonText: {
     fontFamily: 'AveriaSerifLibre_400Regular',

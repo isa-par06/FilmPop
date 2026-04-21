@@ -1,6 +1,6 @@
 //CITATION: Medium, How to Fetch and Display Movie List Using TMDB API
 
-const apiKey = '10c6c5ea756731e81e1748979a8d4cd9';
+const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
 //genre mapping, api provides genre in #, convert to strings, easier to read!
 const GENRE_MAP: { [key:string]: number} = {
