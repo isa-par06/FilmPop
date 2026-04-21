@@ -62,7 +62,7 @@ export default function Home() {
       {/*randomizer button*/}
       <TouchableOpacity activeOpacity={0.8} style={[styles.buttonBox, { width: '95%', height: '10%', top: '31%', alignSelf: 'center'}]} 
       onPress={() => router.push('/random')}>
-        <Text style={[styles.buttonText, {paddingTop: 26}]}>MOVIE RANDOMIZER</Text>
+        <Text style={[styles.buttonText]}>MOVIE RANDOMIZER</Text>
       </TouchableOpacity>
 
       {/*popcorn image*/}

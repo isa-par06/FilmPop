@@ -1,10 +1,10 @@
-import Navbar from "../components/navbar";
+import { Movie } from "@/components/resultsCarousel";
 import { RandomMovieWithAdditionalInformation } from "@/tmdbAPI";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import {GENRE_ID_TO_NAME} from "../tmdbAPI";
-import { Movie } from "@/components/resultsCarousel";
+import Navbar from "../components/navbar";
+import { GENRE_ID_TO_NAME } from "../tmdbAPI";
 
 export default function Random() {
     const router = useRouter();
@@ -82,13 +82,6 @@ export default function Random() {
 
       {/*ticket buttons*/}
           <View style={styles.ticketRow}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={() => router.push('/preferences')}>
-                    <Image 
-                    source={require('../assets/images/ticket1Random.png')}
-                    style={styles.ticketImage}
-                    resizeMode="contain"
-                    />
-            </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.8} style={styles.ticketButton} onPress={loadMovies}>
                     <Image 
                     source={require('../assets/images/ticket2Random.png')}
