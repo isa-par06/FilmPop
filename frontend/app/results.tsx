@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
-import {GENRE_ID_TO_NAME} from "../tmdbAPI";
 
 type Filters = {
   minTime: number;
